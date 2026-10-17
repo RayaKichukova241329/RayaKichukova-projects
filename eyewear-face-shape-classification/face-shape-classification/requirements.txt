@@ -1,0 +1,15 @@
+# Core
+tensorflow
+keras
+numpy
+opencv-python
+pillow
+scikit-learn
+scikit-image
+matplotlib
+seaborn
+
+# Only needed for the Grad-CAM explanations described in docs/responsible-ai.md
+xplique
+
+# Tip: once the notebook runs in your own environment, run `pip freeze` and pin the versions here.

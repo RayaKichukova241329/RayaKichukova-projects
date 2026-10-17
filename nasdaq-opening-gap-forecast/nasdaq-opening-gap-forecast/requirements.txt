@@ -1,0 +1,11 @@
+pandas
+numpy
+scikit-learn
+xgboost
+joblib
+
+# Only needed for the dashboard in app/app.py
+streamlit
+plotly
+
+# Tip: once the notebook runs in your own environment, run `pip freeze` and pin the versions here.

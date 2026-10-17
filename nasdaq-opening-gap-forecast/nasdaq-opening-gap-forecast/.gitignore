@@ -1,0 +1,17 @@
+# data, models and credentials
+Data/
+data/*.csv
+*.csv
+*.pkl
+*.joblib
+.env
+.env.*
+
+# python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+
+# system
+.DS_Store
+Thumbs.db

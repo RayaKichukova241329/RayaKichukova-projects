@@ -1,0 +1,12 @@
+ultralytics
+torch
+opencv-python
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+pyyaml
+tqdm
+
+# Tip: once the notebook runs in your own environment, run `pip freeze` and pin the versions here.

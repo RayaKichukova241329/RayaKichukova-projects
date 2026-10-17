@@ -1,0 +1,15 @@
+# images, labels and weights
+Data/
+*.pt
+runs/
+results/exp2/
+
+# python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.env
+
+# system
+.DS_Store
+Thumbs.db

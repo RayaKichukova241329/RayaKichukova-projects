@@ -1,0 +1,16 @@
+# images and models (real people, and large files)
+Dataset_Images/
+*.keras
+*.h5
+*.zip
+*.mp4
+
+# python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.env
+
+# system
+.DS_Store
+Thumbs.db

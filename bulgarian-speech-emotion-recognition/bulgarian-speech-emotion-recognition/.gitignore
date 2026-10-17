@@ -1,0 +1,18 @@
+# models, data and credentials
+*.keras
+*.h5
+*.pkl
+*.bin
+*.csv
+audio_files/
+.env
+.env.*
+
+# python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+
+# system
+.DS_Store
+Thumbs.db

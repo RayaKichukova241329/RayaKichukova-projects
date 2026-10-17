@@ -1,0 +1,24 @@
+# Pipeline
+assemblyai
+pytubefix
+transformers
+torch
+tensorflow
+pandas
+numpy
+
+# Experiments and notebooks
+scikit-learn
+imbalanced-learn
+tokenizers
+gensim
+spacy
+matplotlib
+seaborn
+requests
+
+# Explainability
+shap
+lime
+
+# Tip: once everything runs in your own environment, run `pip freeze` and pin the versions here.
