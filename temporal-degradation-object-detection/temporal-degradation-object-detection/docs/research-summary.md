@@ -4,7 +4,7 @@
 
 To what extent do morphological evolution and digital data degradation contribute to the performance decay of modern object detection models in historical urban environments?
 
-Prior work found image classifiers lose 7 to 9% accuracy over 14 years (Pegeot et al., 2025). This study asks the same of object detection over 35 years, and separates two causes: poorer image quality and the changing look of cars, buildings and people.
+Prior work (Pégeot et al., 2025) studied how classification accuracy changes as the years pass. This study asks the same of object detection over 35 years, and separates two causes: poorer image quality and the changing look of cars, buildings and people.
 
 ## Design
 
@@ -17,18 +17,18 @@ The proposal's null hypothesis is that temporal distance has no effect on detect
 | | Prediction | Test | Result |
 |---|---|---|---|
 | H1 | F1 is lower on historical than modern data | Mann-Whitney U, per-class F1 (10 against 10) | **Supported:** p = 0.0008 (small), 0.0041 (nano) |
-| H2 | Car, Truck and Pedestrian degrade more than Cyclist and Building | Observed ranking (5 classes is too few for a test) | **Partially supported:** the vehicles and pedestrians degrade most, but Cyclist reaches 100% through scarcity |
-| H3 | Resolution normalisation narrows the gap | Wilcoxon, per class, 320 against 640 px | **Refuted:** the gap widens for every class |
-| H4 | Historical errors concentrate at the edges | Fisher's exact on pooled error counts | **Supported:** 63.2% against 32.3% (small), p < 0.0001 |
+| H2 | Car, Truck and Pedestrian degrade more than Cyclist and Building | Observed ranking (5 classes is too few for a test) | **Not clearly supported:** by AP@0.5 the predicted group loses 69% (small) and 71% (nano) against 73% and 68% for Cyclist and Building; Car is among the least degraded |
+| H3 | Resolution normalisation narrows the gap | Wilcoxon, per class, 320 against 640 px | **Refuted:** the gap widens for four of the five classes (p = 0.97) |
+| H4 | Historical errors concentrate at the edges | Fisher's exact on pooled error counts | **Partly supported:** errors reach the outer 15% of the frame 63.2% of the time against 32.3% (small), p < 0.0001, but by box centre they sit toward the middle |
 | H5 | Failure is recognition rather than localisation | Binomial on classified class-period pairs | **Refuted:** recognition failures are 4 of 18 (small) and 1 of 19 (nano) |
 
 ## Main results
 
-- Relative mAP drop of **61.2%** (small) and **62.9%** (nano), roughly 7 to 9 times the drop reported for classification.
+- Relative mAP drop of **61.2%** (small) and **62.9%** (nano).
 - Quality explains **11.2%** (small) and **22.4%** (nano) of the drop. Ageing a modern photo to look like the 1980s costs 6% and 13% of the mAP. Real 1980s photos cost 54% and 58%.
 - Resolution normalisation widens the gap by **128%** (small) and **109%** (nano) from 320 to 1280 pixels.
-- Edge error rates are about **62%** historical against **33%** modern.
-- Truck and Cyclist AP is zero on both historical periods. The ranking of degradation is Truck = Cyclist, then Pedestrian (about 89%), Car (about 76%) and Building (about 54%).
+- Error boxes reach the outer 15% of the frame about **62%** of the time on historical images against **33%** on modern ones. By box centre, errors sit toward the middle of every dataset.
+- Truck and Cyclist AP@0.5 is zero on both historical periods (7 historical trucks; 121 historical cyclists, all missed). Pedestrian loses about 75%, Building 35 to 46% and Car 33 to 39%. At the default confidence threshold of 0.25 the ranking differs (Pedestrian 89%, Car 73 to 79%, Building 46 to 61%) because the model ranks historical cars sensibly but reports them with low confidence.
 - Training on all four periods raised held-out 1980s mAP from about 0.15 to 0.44-0.46, with no visible loss on modern images in this small test.
 
 ## Why the finding matters

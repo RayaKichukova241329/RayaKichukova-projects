@@ -46,18 +46,34 @@ The ageing pipeline cannot reproduce historical sharpness, so the quality share 
 
 ## SQ3: edge error rate
 
-Share of false positives and false negatives within 15% of the image boundary.
+Share of false positives and false negatives whose box reaches into the outer 15% of the frame on any side (the edge-reach rate).
 
 | Model | 1980s | 1990s | KITTI | Mapillary | Historical avg | Modern avg | Gap |
 |---|---|---|---|---|---|---|---|
 | YOLOv11s | 61.1% | 64.5% | 33.5% | 31.8% | 62.8% | 32.7% | 30.2 points |
 | YOLOv11n | 61.0% | 60.7% | 34.1% | 31.3% | 60.8% | 32.7% | 28.1 points |
 
-A uniform spread of errors would give about 28%.
+Because large boxes reach the border almost by construction, there is no simple uniform baseline for this measure, and the comparison between periods is the evidence.
+
+Measured by box centre instead, from the notebook's error heatmaps, the share of errors in the outer 15% border is 29.8% (1980s), 37.7% (1990s), 20.1% (KITTI) and 24.6% (Mapillary). A uniform spread of centres would give about 51%, so errors sit toward the middle in every dataset, with historical shares higher than modern ones.
+
+## Per-class AP@0.5 (Ultralytics, full precision-recall curve)
+
+Computed from the per-class values in the Experiment 2 heatmap (rounded to two decimals), averaged over the two historical and the two modern sets.
+
+| Class | v11s historical | v11s modern | v11s drop | v11n historical | v11n modern | v11n drop |
+|---|---|---|---|---|---|---|
+| Truck | 0.000 | 0.285 | 100% | 0.000 | 0.340 | 100% |
+| Cyclist | 0.000 | 0.200 | 100% | 0.000 | 0.285 | 100% |
+| Pedestrian | 0.155 | 0.630 | 76% | 0.135 | 0.540 | 75% |
+| Building | 0.240 | 0.445 | 46% | 0.285 | 0.440 | 35% |
+| Car | 0.500 | 0.745 | 33% | 0.445 | 0.725 | 39% |
+
+Truck rests on 7 historical instances and Cyclist on 121 (all missed). The modern Truck and Cyclist values rest on few instances in the 30-image held-out sets.
 
 ## SQ4: per-class vulnerability
 
-AP@0.5 averaged over the two historical and the two modern sets.
+Approximate AP@0.5 (11-point interpolation of detections at confidence 0.25, comparable across periods but not with the Ultralytics mAP above), averaged over the two historical and the two modern sets.
 
 | Class | v11s historical | v11s modern | v11s drop | v11n historical | v11n modern | v11n drop |
 |---|---|---|---|---|---|---|
@@ -67,19 +83,21 @@ AP@0.5 averaged over the two historical and the two modern sets.
 | Car | 0.133 | 0.645 | 79.4% | 0.170 | 0.623 | 72.7% |
 | Building | 0.115 | 0.296 | 61.3% | 0.150 | 0.277 | 45.7% |
 
-Dominant error type: localisation failure for every class and period on historical data. Recognition failures appear only on the modern held-out sets (4 of 18 classified class-period pairs for YOLOv11s, 1 of 19 for YOLOv11n).
+The SQ4 table below counts only detections above the default confidence threshold of 0.25, which is why historical Car looks far worse here than in the AP@0.5 table above.
+
+Dominant error type (at threshold 0.25): localisation failure for every class and period on historical data. Recognition failures appear only on the modern held-out sets (4 of 18 classified class-period pairs for YOLOv11s, 1 of 19 for YOLOv11n).
 
 ## Hypothesis tests
 
 | | Test | YOLOv11s | YOLOv11n | Verdict |
 |---|---|---|---|---|
 | H1 | Mann-Whitney U on per-class F1 | p = 0.0008 | p = 0.0041 | Supported |
-| H2 | Observed degradation ranking | 89.5% against 80.7% | 86.9% against 72.9% | Partially supported |
-| H3 | Wilcoxon, per-class gap, 320 against 640 | gap grew for all 5 classes | gap grew for all 5 classes | Refuted |
+| H2 | Observed degradation ranking (AP@0.5) | 69.3% against 72.9% | 71.1% against 67.7% | Not clearly supported |
+| H3 | Wilcoxon, per-class gap, 320 against 640 | gap grew for 4 of 5 classes (p = 0.97) | gap grew for 4 of 5 classes (p = 0.97) | Refuted |
 | H4 | Fisher's exact, pooled errors | 63.2% against 32.3% | 60.8% against 32.0% | Supported (p < 0.0001) |
 | H5 | Binomial, localisation against recognition | 4 of 18 recognition | 1 of 19 recognition | Refuted |
 
-H2 compares the mean degradation of Car, Truck and Pedestrian against Cyclist and Building.
+H2 compares the mean AP@0.5 drop of Car, Truck and Pedestrian against Cyclist and Building (computed in Section 3.2 of the notebook).
 
 The raw result files (`*.json`) are written to `results/` by the notebook and are not committed.
 
